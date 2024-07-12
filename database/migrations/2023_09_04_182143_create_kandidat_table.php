@@ -31,13 +31,13 @@ return new class extends Migration {
                 ->onDelete('cascade');
 
             $table->foreign('drzava_id')
-                ->references('drzava_id') // Use the appropriate column name from the adresa table.
+                ->references('drzava_id') 
                 ->on('adresa')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
             $table->foreign('adresa_id')
-                ->references('id') // Use the appropriate column name from the adresa table.
+                ->references('id') 
                 ->on('adresa')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');

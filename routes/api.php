@@ -1,4 +1,7 @@
 <?php
+  
+
+
 
 use App\Http\Controllers\AdresaController;
 use App\Http\Controllers\API\AuthController;
@@ -25,22 +28,22 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/adrese', [AdresaController::class, 'showAddressesInCity']);
-Route::get('/drzave', [DrzavaController::class, 'index']);
-Route::get('/gradovi', [GradController::class, 'gradoviOdDrzave']);
-Route::post('/kandidat', [KandidatController::class, 'kreirajKandidata']);
-Route::get('/kandidat', [KandidatController::class, 'prikaziKandidate']);
-Route::delete('/kandidat/{kandidat}', [KandidatController::class, 'deleteKandidat']);
-Route::get('/drzava/{drzavaid}', [DrzavaController::class, 'drzavaZaId']);
-Route::put('/kandidat/{id}', [KandidatController::class, 'update']);
-Route::get('/zakon', [ZakonikController::class, 'show']);
-Route::get('/clanZakona', [ZakonikController::class, 'clanoviZakona']);
-Route::post('/ugovor', [UgovorController::class, 'store']);
-Route::get('/ugovor', [UgovorController::class, 'show']);
-Route::delete('/ugovor', [UgovorController::class, 'storniraj']);
-Route::get('/pretraga', [UgovorController::class, 'pretrazi']);
-Route::get('/stavke', [UgovorController::class, 'prikaziStavke']);
-Route::put('/ugovor/{id}', [UgovorController::class, 'azuriraj']);
+// Route::get('/adrese', [AdresaController::class, 'showAddressesInCity']);
+// Route::get('/drzave', [DrzavaController::class, 'index']);
+// Route::get('/gradovi', [GradController::class, 'gradoviOdDrzave']);
+// Route::post('/kandidat', [KandidatController::class, 'kreirajKandidata']);
+// Route::get('/kandidat', [KandidatController::class, 'prikaziKandidate']);
+// Route::delete('/kandidat/{kandidat}', [KandidatController::class, 'deleteKandidat']);
+// Route::get('/drzava/{drzavaid}', [DrzavaController::class, 'drzavaZaId']);
+// Route::put('/kandidat/{id}', [KandidatController::class, 'update']);
+// Route::get('/zakon', [ZakonikController::class, 'show']);
+// Route::get('/clanZakona', [ZakonikController::class, 'clanoviZakona']);
+// Route::post('/ugovor', [UgovorController::class, 'store']);
+// Route::get('/ugovor', [UgovorController::class, 'show']);
+// Route::delete('/ugovor', [UgovorController::class, 'storniraj']);
+// Route::get('/pretraga', [UgovorController::class, 'pretrazi']);
+// Route::get('/stavke', [UgovorController::class, 'prikaziStavke']);
+// Route::put('/ugovor/{id}', [UgovorController::class, 'azuriraj']);
 // Route::post('/register', [AuthController::class,'register']);
 // Route::post('/login', [AuthController::class,'login']);
 
@@ -66,11 +69,11 @@ Route::middleware(['cors'])->group(function () {
     Route::get('/adrese', [AdresaController::class, 'showAddressesInCity']);
 Route::get('/drzave', [DrzavaController::class, 'index']);
 Route::get('/gradovi', [GradController::class, 'gradoviOdDrzave']);
-Route::post('/kandidat', [KandidatController::class, 'kreirajKandidata']);
-Route::get('/kandidat', [KandidatController::class, 'prikaziKandidate']);
-Route::delete('/kandidat/{kandidat}', [KandidatController::class, 'deleteKandidat']);
+Route::post('/kandidat', [KandidatController::class, 'kreirajKandidata'])->middleware('checkUserRole');
+Route::get('/kandidat', [KandidatController::class, 'prikaziKandidate'])->middleware('checkUserRole');
+Route::delete('/kandidat/{kandidat}', [KandidatController::class, 'deleteKandidat'])->middleware('checkUserRole');
 Route::get('/drzava/{drzavaid}', [DrzavaController::class, 'drzavaZaId']);
-Route::put('/kandidat/{id}', [KandidatController::class, 'update']);
+Route::put('/kandidat/{id}', [KandidatController::class, 'update'])->middleware('checkUserRole');
 Route::get('/zakon', [ZakonikController::class, 'show']);
 Route::get('/clanZakona', [ZakonikController::class, 'clanoviZakona']);
 Route::post('/ugovor', [UgovorController::class, 'store']);
@@ -79,12 +82,15 @@ Route::delete('/ugovor', [UgovorController::class, 'storniraj']);
 Route::get('/pretraga', [UgovorController::class, 'pretrazi']);
 Route::get('/stavke', [UgovorController::class, 'prikaziStavke']);
 Route::put('/ugovor/{id}', [UgovorController::class, 'azuriraj']);
-
-    Route::middleware(['auth:api'])->group(function () {
+Route::middleware(['auth:api'])->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
-        // Dodaj ovde druge zaštićene rute
     });
 });
-// Route::middleware('jwt.verify')->group(function () {
-//     Route::post('/logout', [AuthController::class, 'logout']);
-// });
+Route::middleware('jwt.verify')->group(function () {
+    Route::post('/ugovor', [UgovorController::class, 'store']);
+    Route::get('/ugovor', [UgovorController::class, 'show']);
+    Route::delete('/ugovor', [UgovorController::class, 'storniraj']);
+    Route::get('/pretraga', [UgovorController::class, 'pretrazi']);
+    Route::get('/stavke', [UgovorController::class, 'prikaziStavke']);
+    Route::put('/ugovor/{id}', [UgovorController::class, 'azuriraj']);
+});

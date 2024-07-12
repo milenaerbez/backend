@@ -41,13 +41,13 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        // Validacija podataka
+       
         $credentials = $request->only('email', 'password');
 
-        // Pokušaj autentifikacije korisnika sa datim kredencijalima
-        if (!$token = JWTAuth::attempt($credentials)) {
-            return response()->json(['error' => 'Invalid credentials'], 401);
-        }
+        // if (!$token = JWTAuth::attempt($credentials)) {
+        //     Log::info($token);
+        //     return response()->json(['error' => 'Invalid credentials'], 401);
+        // }
         $user = User::where('email', $request['email'])->firstOrFail();
 
         $token = JWTAuth::fromUser($user, ['role' => $user->role]);
